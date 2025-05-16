@@ -9,8 +9,13 @@ import kotlinx.serialization.json.Json
 
 object MetricsClient {
     private val client = HttpClient(CIO)
+    // Handling Server URL
     private const val METRIC_SERVER_URL = "http://127.0.0.1:8080/metrics"
 
+    /**
+     * why suspend?
+     * Apply coroutine in case there are more simultaneous requests
+     */
     suspend fun send(domain: String, method: String) {
         val metric = Metric(domain, method, 1.toString(), null)
         val json = Json.encodeToString(metric)
