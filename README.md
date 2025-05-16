@@ -1,8 +1,9 @@
 # Metrics SDK
 
 ## 📖 개요
-Metrics SDK는 애플리케이션에서 발생하는 이벤트 데이터를 중개 서버로 전송하기 위한 간단한 라이브러리입니다. 이 SDK는 이벤트 데이터를 JSON 형식으로 직렬화하고, HTTP POST 요청을 통해 지정된 서버로 전송합니다.
-
+Metrics SDK는 애플리케이션에서 발생하는 이벤트 데이터를 중개 서버로 전송하기 위한 간단한 라이브러리입니다. 
+이 SDK는 이벤트 데이터를 JSON 형식으로 직렬화하고, HTTP POST 요청을 통해 지정된 서버로 전송합니다.
+- 해당 라이브러리는 onPromise 환경을 스탠다드로 설계되어, 추후 queue 기반의 적재 매커니즘을 추가할 예정입니다.
 ---
 
 ## 🛠️ 주요 기능
@@ -20,16 +21,6 @@ Metrics SDK는 애플리케이션에서 발생하는 이벤트 데이터를 중�
   - `kotlinx.serialization`: JSON 직렬화/역직렬화
   - `ktor-client-cio`: HTTP 클라이언트
 - **기본 서버 URL**: `http://127.0.0.1:8080/metrics`
-
----
-
-## 📦 설치
-1. 프로젝트의 `build.gradle.kts` 파일에 다음 의존성을 추가:
-   ```kotlin
-   dependencies {
-       implementation("io.ktor:ktor-client-cio:2.3.4")
-       implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
-   }
 
 ---
 
