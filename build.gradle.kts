@@ -32,6 +32,28 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:2.3.3")
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.3")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+
+    // Spock Framework
+    testImplementation("org.spockframework:spock-core:2.3-groovy-3.0")
+
+    // Groovy
+    testImplementation("org.codehaus.groovy:groovy:3.0.17")
+
+    // Ktor Client Mock
+    testImplementation("io.ktor:ktor-client-mock:2.3.4")
+
+    // Kotlinx Coroutines
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+
+    // JUnit
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
+
+    // Kotlinx Coroutines Test
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }
 
 publishing {
