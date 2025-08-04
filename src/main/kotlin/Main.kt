@@ -19,6 +19,6 @@ fun main() = runBlocking {
     val metricsClient = MetricsClient(httpClient, logger)
 
     // MetricsClient 사용
-    metricsClient.send("", "create", "user123")
+    metricsClient.healthCheck()
     metricsClient.send("user", "login", "user12222")
 }
