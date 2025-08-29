@@ -4,6 +4,10 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import kotlinx.coroutines.runBlocking
 import com.metrics.sdk.model.MetricsData
+import io.ktor.http.*
+import io.ktor.server.application.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 
 fun main() {
     // SDK 인스턴스 생성 (프로메테우스 메트릭스 활성화)
@@ -11,6 +15,16 @@ fun main() {
         enableMetrics(true)
         prometheusPort(8081)
     }
+
+    embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
+        routing {
+            get("/metrics") {
+                val snapshot = sdk.getMetricsSnapshot()
+                println("Snapshot: $snapshot")
+                snapshot?.let { call.respondText(it, ContentType.Text.Plain) }
+            }
+        }
+    }.start(wait = true)
 
     runBlocking {
         // 테스트용 메트릭스 생성
@@ -58,9 +72,4 @@ fun main() {
         println("Metrics snapshot:")
         println(sdk.getMetricsSnapshot())
     }
-
-    // 웹 서버 시작 (프로메테우스 메트릭 확인용)
-    embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
-        // 필요한 설정 추가
-    }.start(wait = true)
 }
