@@ -1,68 +1,76 @@
 plugins {
-    kotlin("jvm") version "1.9.10"
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.10"
+    kotlin("jvm") version "1.9.24"
+    kotlin("plugin.serialization") version "1.9.24"
+    `java-library`
     `maven-publish`
 }
 
-kotlin {
-    jvmToolchain(17) // 또는 11
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    kotlinOptions {
+        jvmTarget = "11"
+    }
 }
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
+        languageVersion.set(JavaLanguageVersion.of(11))
     }
 }
 
-group = "com.example.metrics"
+group = "com.metrics.sdk"
 version = "1.0.0"
 
 repositories {
     mavenCentral()
 }
-
+val ktorVersion = "2.3.5"
 dependencies {
-    implementation(kotlin("stdlib"))
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("io.ktor:ktor-server-core:$ktorVersion")
+    implementation("io.ktor:ktor-server-netty:$ktorVersion")
+    implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+    testImplementation("io.ktor:ktor-server-tests:$ktorVersion")
+    testImplementation("org.jetbrains.kotlin:kotlin-test:1.9.10")
+
+    // Core dependencies
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+
+    // Metrics (optional dependencies)
+    implementation("io.micrometer:micrometer-registry-prometheus:1.11.4")
+    implementation("io.prometheus:simpleclient:0.16.0")
+    implementation("io.prometheus:simpleclient_httpserver:0.16.0")
+
+    // Logging
     implementation("org.slf4j:slf4j-api:2.0.9")
-    implementation("ch.qos.logback:logback-classic:1.4.11")
 
-    implementation("io.ktor:ktor-client-core:2.3.3")
-    implementation("io.ktor:ktor-client-cio:2.3.3")
-    implementation("io.ktor:ktor-client-content-negotiation:2.3.3")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
-
-    // Spock Framework
-    testImplementation("org.spockframework:spock-core:2.3-groovy-3.0")
-
-    // Groovy
-    testImplementation("org.codehaus.groovy:groovy:3.0.17")
-
-    // Ktor Client Mock
-    testImplementation("io.ktor:ktor-client-mock:2.3.4")
-
-    // Kotlinx Coroutines
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-
-    // JUnit
-    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
-
-    // Kotlinx Coroutines Test
+    // Test dependencies
+    testImplementation(kotlin("test"))
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("ch.qos.logback:logback-classic:1.4.11")
 }
 
-tasks.withType<Test> {
+tasks.test {
     useJUnitPlatform()
 }
 
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            groupId = "com.example.metrics"
-            artifactId = "metrics-sdk-kotlin"
-            version = "1.0.0"
             from(components["java"])
+
+            pom {
+                name.set("Metric SDK")
+                description.set("A high-performance metrics operations library with built-in monitoring")
+                url.set("https://github.com/lgw2238/metrics-sdk-kotlin")
+
+                licenses {
+                    license {
+                        name.set("MIT License")
+                        url.set("https://opensource.org/licenses/MIT")
+                    }
+                }
+            }
         }
     }
 }
