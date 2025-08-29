@@ -83,3 +83,57 @@ src/
 │   │   │   ├── monitoring/          // Metrics 수집 로직
 │   └── resources/
 ```
+
+## 기본 설정 (domain version)
+```kotlin
+// 메트릭스 로거 및 파이프라인 초기화
+val methodMetricsLogger = MethodMetricsLogger()
+val metricsPipeline = MethodMetricsPipeline(methodMetricsLogger)
+
+// 주기적인 메트릭스 내보내기 설정 (60초마다)
+methodMetricsLogger.startExportJob(intervalMs = 60000)
+```
+
+## 사용 예제 코드 (매서드 메트릭스 로깅 - domain)
+```Kotlin
+fun testMethod(orderId: String, amount: Double): Boolean {
+  // 메트릭스 수집 시작
+  val context = metricsPipeline.startRecording(
+    methodName = "testMethod",
+    parameters = mapOf(
+      "testId" to testId,
+      "testMessage" to message.toString()
+    ),
+    domainId = "testSevice"
+  )
+
+  return try {
+    // 실제 비즈니스 로직
+    val result = testLogic.process(orderId, amount)
+
+    // 성공 시 메트릭스 기록 완료
+    context.end(successful = true)
+    result
+  } catch (e: Exception) {
+    // 실패 시 메트릭스 기록 완료 (오류 메시지 포함)
+    context.end(successful = false, errorMessage = e.message)
+    throw e
+  }
+}
+```
+## 수집된 데이터 조회 (prometheus - domain)
+```Kotlin
+// 수집된 모든 메트릭스 조회
+val metrics = methodMetricsLogger.getMetrics()
+
+// 도메인별 성능 통계
+val domainGroups = metrics.groupBy { it.domainId ?: "unknown" }
+domainGroups.forEach { (domain, domainMetrics) ->
+    println("[$domain] 도메인 통계:")
+    val avgTime = domainMetrics.map { it.executionTimeMs }.average()
+    val successRate = domainMetrics.count { it.successful } * 100.0 / domainMetrics.size
+    println("  - 총 호출: ${domainMetrics.size}회")
+    println("  - 평균 실행시간: ${avgTime.toInt()}ms")
+    println("  - 성공률: ${String.format("%.1f", successRate)}%")
+}
+```
