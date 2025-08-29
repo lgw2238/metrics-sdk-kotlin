@@ -84,7 +84,7 @@ class MetricsSDK private constructor(
     }
 
     /**
-     * Add two matrices
+     * Add two metrics
      */
     suspend fun add(id1: String, id2: String, resultId: String? = null): Result<MetricsData> {
         return metricsEngine.add(id1, id2, resultId)

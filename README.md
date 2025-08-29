@@ -41,7 +41,7 @@ val sdk = MetricsSDK.create {
 ```kotlin
 val metrics = MetricsData(
     id = "metrics1",
-    name = "Sample Matrix",
+    name = "Sample Metrics",
     rows = 2,
     columns = 2,
     data = listOf(

@@ -55,7 +55,7 @@ class MetricsEngine   (
         return try {
             Result.success(metrics.values.toList())
         } catch (e: Exception) {
-            logger.error("Failed to get all matrices", e)
+            logger.error("Failed to get all metrics", e)
             Result.failure(e)
         }
     }
@@ -251,7 +251,7 @@ class MetricsEngine   (
             Result.success(result)
 
         } catch (e: Exception) {
-            logger.error("Failed to perform $operationType on matrices $id1 and $id2", e)
+            logger.error("Failed to perform $operationType on metrics $id1 and $id2", e)
             Result.failure(e)
         }
     }
