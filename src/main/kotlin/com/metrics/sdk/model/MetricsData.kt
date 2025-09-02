@@ -7,7 +7,7 @@ data class MetricsData(
     val columns: Int,
     val data: List<List<Double>>,
     val timestamp: Long = System.currentTimeMillis(),
-    val metadata: Map<String, String> = emptyMap()
+    val metadata: Map<String, String> = emptyMap(),
 ) {
     /**
      * Validate metrics data integrity

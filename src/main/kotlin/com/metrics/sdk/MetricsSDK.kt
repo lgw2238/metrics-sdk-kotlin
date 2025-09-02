@@ -11,7 +11,7 @@ import kotlinx.coroutines.SupervisorJob
 
 class MetricsSDK private constructor(
     private val config: MetricsSDKConfig,
-    private val metricsCollector: MetricsCollector?
+    private val metricsCollector: MetricsCollector?,
 ) {
     private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     private val metricsEngine = MetricsEngine(scope, metricsCollector)

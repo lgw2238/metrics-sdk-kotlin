@@ -12,5 +12,5 @@ data class MethodMetricsReport(
     val failedCalls: Int,
     val averageExecutionTimeMs: Double,
     val maxExecutionTimeMs: Long,
-    val methodCounts: Map<String, Int>
+    val methodCounts: Map<String, Int>,
 )

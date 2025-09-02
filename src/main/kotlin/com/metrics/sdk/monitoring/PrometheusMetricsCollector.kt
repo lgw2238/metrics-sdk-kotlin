@@ -59,7 +59,7 @@ class PrometheusMetricsCollector(private val port: Int?) : MetricsCollector {
 
     override fun recordMetricsStats(metricsId: String, stats: MetricsStatistics) {
         registry.gauge("metrics_mean", listOf(Tag.of("metrics_id", metricsId)), stats.mean)
-        registry.gauge("metrics_std", listOf(Tag.of("metrics_id", metricsId)),  stats.standardDeviation)
+        registry.gauge("metrics_std", listOf(Tag.of("metrics_id", metricsId)), stats.standardDeviation)
         registry.gauge("metrics_min", listOf(Tag.of("metrics_id", metricsId)), stats.min)
         registry.gauge("metrics_max", listOf(Tag.of("metrics_id", metricsId)), stats.max)
         registry.gauge("metrics_variance", listOf(Tag.of("metrics_id", metricsId)), stats.variance)

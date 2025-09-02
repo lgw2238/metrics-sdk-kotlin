@@ -10,9 +10,9 @@ import org.slf4j.LoggerFactory
 import kotlin.math.sqrt
 import kotlin.system.measureTimeMillis
 
-class MetricsEngine   (
+class MetricsEngine(
     private val scope: CoroutineScope,
-    private val metricsCollector: MetricsCollector?
+    private val metricsCollector: MetricsCollector?,
 ) {
     private val logger = LoggerFactory.getLogger(MetricsEngine::class.java)
     private val metrics = mutableMapOf<String, MetricsData>()
@@ -213,15 +213,17 @@ class MetricsEngine   (
             val mean = flatData.average()
             val variance = flatData.map { (it - mean) * (it - mean) }.average()
 
-            Result.success(MetricsStatistics(
-                metricsId = id,
-                mean = mean,
-                standardDeviation = sqrt(variance),
-                variance = variance,
-                min = flatData.minOrNull() ?: 0.0,
-                max = flatData.maxOrNull() ?: 0.0,
-                sum = flatData.sum()
-            ))
+            Result.success(
+                MetricsStatistics(
+                    metricsId = id,
+                    mean = mean,
+                    standardDeviation = sqrt(variance),
+                    variance = variance,
+                    min = flatData.minOrNull() ?: 0.0,
+                    max = flatData.maxOrNull() ?: 0.0,
+                    sum = flatData.sum()
+                )
+            )
 
         } catch (e: Exception) {
             logger.error("Failed to calculate statistics for metric $id", e)
@@ -234,7 +236,7 @@ class MetricsEngine   (
         id1: String,
         id2: String,
         resultId: String?,
-        operation: (MetricsData, MetricsData, String) -> MetricsData
+        operation: (MetricsData, MetricsData, String) -> MetricsData,
     ): Result<MetricsData> {
         return try {
             val metric1 = metrics[id1] ?: return Result.failure(NoSuchElementException("metric not found: $id1"))

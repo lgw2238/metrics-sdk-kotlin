@@ -13,7 +13,7 @@ data class MethodMetric(
     val successful: Boolean = false,
     val errorMessage: String? = null,
     val domainId: String? = null,
-    val traceId: String = generateTraceId()
+    val traceId: String = generateTraceId(),
 ) {
     companion object {
         private fun generateTraceId(): String =

@@ -7,5 +7,5 @@ data class MetricsSDKConfig(
     val enableMetrics: Boolean = false,
     val prometheusPort: Int? = null,
     val maxMatrices: Int = 10000,
-    val operationTimeoutMs: Long = 30000
+    val operationTimeoutMs: Long = 30000,
 )

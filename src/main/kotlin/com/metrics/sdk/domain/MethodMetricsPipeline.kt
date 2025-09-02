@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory
  * Domain service to handle method metrics recording and logging.
  */
 class MethodMetricsPipeline(
-    private val metricsLogger: MethodMetricsLogger
+    private val metricsLogger: MethodMetricsLogger,
 ) {
     private val logger = LoggerFactory.getLogger(MethodMetricsPipeline::class.java)
 
@@ -18,7 +18,7 @@ class MethodMetricsPipeline(
         methodName: String,
         parameters: Map<String, String>,
         domainId: String? = null,
-        block: suspend () -> T
+        block: suspend () -> T,
     ): T {
         val metric = metricsLogger.recordMethodStart(methodName, parameters, domainId)
 
@@ -38,7 +38,7 @@ class MethodMetricsPipeline(
     fun startRecording(
         methodName: String,
         parameters: Map<String, String>,
-        domainId: String? = null
+        domainId: String? = null,
     ): MethodRecordingContext {
         val metric = metricsLogger.recordMethodStart(methodName, parameters, domainId)
         return MethodRecordingContext(metricsLogger, metric)
@@ -46,7 +46,7 @@ class MethodMetricsPipeline(
 
     class MethodRecordingContext(
         private val metricsLogger: MethodMetricsLogger,
-        private val metric: MethodMetric
+        private val metric: MethodMetric,
     ) {
         fun end(successful: Boolean = true, errorMessage: String? = null) {
             metricsLogger.recordMethodEnd(metric, successful, errorMessage)

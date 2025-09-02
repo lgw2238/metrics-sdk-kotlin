@@ -3,7 +3,7 @@ package com.metrics.sdk.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MetricsStatistics (
+data class MetricsStatistics(
     val metricsId: String,
     val mean: Double,
     val standardDeviation: Double,
@@ -11,5 +11,5 @@ data class MetricsStatistics (
     val max: Double,
     val sum: Double,
     val variance: Double,
-    val calculatedAt: Long = System.currentTimeMillis()
+    val calculatedAt: Long = System.currentTimeMillis(),
 )
